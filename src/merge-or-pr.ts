@@ -30,12 +30,12 @@ async function tryMerge(
 ): Promise<boolean> {
   try {
     const branchRef = `refs/heads/${resolvePrBranchName}`;
-    warning('merge "${branchRef}" on "${base}"')
+    warning( `merge "${head}" on "${base}" `)
     await octokit.rest.repos.merge({
       repo,
       owner,
-      head,
       base,
+      head,
     });
     return true;
   } catch (error) {

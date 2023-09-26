@@ -64,12 +64,12 @@ exports.mergeOrPr = mergeOrPr;
 async function tryMerge(octokit, { repoName: repo, repoOwner: owner, targetBranch: base, mergeBranchName: head, mergeBranchName: resolvePrBranchName }) {
     try {
         const branchRef = `refs/heads/${resolvePrBranchName}`;
-        (0, core_1.warning)('merge "${branchRef}" on "${base}"');
+        (0, core_1.warning)(`merge "${head}" on "${base}" `);
         await octokit.rest.repos.merge({
             repo,
             owner,
-            head,
             base,
+            head,
         });
         return true;
     }
