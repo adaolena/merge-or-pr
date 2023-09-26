@@ -23,8 +23,8 @@ async function tryMerge(
   {
     repoName: repo,
     repoOwner: owner,
-    targetBranch: base,
-    mergeBranchName: head,
+    targetBranch: head,
+    mergeBranchName: base,
     mergeBranchName: resolvePrBranchName
   }: Config
 ): Promise<boolean> {

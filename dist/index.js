@@ -61,7 +61,7 @@ async function mergeOrPr(config) {
     (0, core_1.warning)('merged');
 }
 exports.mergeOrPr = mergeOrPr;
-async function tryMerge(octokit, { repoName: repo, repoOwner: owner, targetBranch: base, mergeBranchName: head, mergeBranchName: resolvePrBranchName }) {
+async function tryMerge(octokit, { repoName: repo, repoOwner: owner, targetBranch: head, mergeBranchName: base, mergeBranchName: resolvePrBranchName }) {
     try {
         const branchRef = `refs/heads/${resolvePrBranchName}`;
         (0, core_1.warning)(`merge "${head}" on "${base}" `);
