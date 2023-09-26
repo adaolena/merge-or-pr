@@ -28,8 +28,8 @@ async function tryMerge(
     await octokit.rest.repos.merge({
       repo,
       owner,
-      branchRef,
       base,
+      branchRef,
     });
     return true;
   } catch (error) {
