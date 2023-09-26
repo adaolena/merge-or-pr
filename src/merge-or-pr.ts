@@ -5,10 +5,16 @@ import { Config } from "./types";
 
 export async function mergeOrPr(config: Config) {
   const octokit = getOctokit(config.repoToken);
+  warning('create pr')
+
   await createPr(octokit, config);
   setOutput("PR_CREATED", false);
+  warning('pr created')
+  warning('try merge')
 
   await tryMerge(octokit, config)
+  warning('merged')
+
  
 }
 
@@ -24,7 +30,7 @@ async function tryMerge(
 ): Promise<boolean> {
   try {
     const branchRef = `refs/heads/${resolvePrBranchName}`;
-    warning('merge ${branchRef} on ${base}')
+    warning('merge "${branchRef}" on "${base}"')
     await octokit.rest.repos.merge({
       repo,
       owner,
