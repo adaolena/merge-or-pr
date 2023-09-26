@@ -34,8 +34,8 @@ async function tryMerge(
     await octokit.rest.repos.merge({
       repo,
       owner,
-      head,
       base,
+      head,
     });
     return true;
   } catch (error) {
