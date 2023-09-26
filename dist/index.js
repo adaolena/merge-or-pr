@@ -68,8 +68,8 @@ async function tryMerge(octokit, { repoName: repo, repoOwner: owner, targetBranc
         await octokit.rest.repos.merge({
             repo,
             owner,
-            base,
             head,
+            base,
         });
         return true;
     }
