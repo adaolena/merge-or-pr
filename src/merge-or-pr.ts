@@ -5,9 +5,9 @@ import { Config } from "./types";
 
 export async function mergeOrPr(config: Config) {
   const octokit = getOctokit(config.repoToken);
-  if (!(await tryMerge(octokit, config))) {
-    await createPr(octokit, config);
-  }
+  await createPr(octokit, config);
+  await tryMerge(octokit, config)
+ 
 }
 
 async function tryMerge(
@@ -17,14 +17,17 @@ async function tryMerge(
     repoOwner: owner,
     targetBranch: base,
     headToMerge: head,
+    mergeBranchName: resolvePrBranchName
   }: Config
 ): Promise<boolean> {
   try {
+    const branchRef = `refs/heads/${resolvePrBranchName}`;
+
     await octokit.rest.repos.merge({
       repo,
       owner,
       base,
-      head,
+      branchRef,
     });
     setOutput("PR_CREATED", false);
     return true;

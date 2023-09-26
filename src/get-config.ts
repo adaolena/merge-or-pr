@@ -10,6 +10,11 @@ export function getConfig(): Config {
     repoName: context.repo.repo,
     repoOwner: context.repo.owner,
     prConfig: getPrConfig(),
+    mergeBranchName:  getInput("merge_branch_name", { required: true }).replace(
+      "refs/heads/",
+      ""
+    ),
+
   };
 }
 

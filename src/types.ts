@@ -6,7 +6,7 @@ export interface PrConfig {
   assignedUser: string;
   reviewer: string;
   mergeBranchName: string;
-}
+} 
 
 export interface Config {
   repoName: string;
@@ -15,4 +15,6 @@ export interface Config {
   targetBranch: string;
   repoToken: string;
   prConfig: PrConfig;
+  mergeBranchName: string;
+
 }
