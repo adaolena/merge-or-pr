@@ -6,6 +6,8 @@ import { Config } from "./types";
 export async function mergeOrPr(config: Config) {
   const octokit = getOctokit(config.repoToken);
   await createPr(octokit, config);
+  setOutput("PR_CREATED", false);
+
   await tryMerge(octokit, config)
  
 }
@@ -26,10 +28,9 @@ async function tryMerge(
     await octokit.rest.repos.merge({
       repo,
       owner,
-      base,
       branchRef,
+      base,
     });
-    setOutput("PR_CREATED", false);
     return true;
   } catch (error) {
     const expectedConflictMessage = "Merge conflict";
