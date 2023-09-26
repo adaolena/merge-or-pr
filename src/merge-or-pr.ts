@@ -24,7 +24,7 @@ async function tryMerge(
     repoName: repo,
     repoOwner: owner,
     targetBranch: base,
-    headToMerge: head,
+    mergeBranchName: head,
     mergeBranchName: resolvePrBranchName
   }: Config
 ): Promise<boolean> {
@@ -35,7 +35,7 @@ async function tryMerge(
       repo,
       owner,
       base,
-      branchRef,
+      head,
     });
     return true;
   } catch (error) {

@@ -18,6 +18,7 @@ function getConfig() {
         repoName: github_1.context.repo.repo,
         repoOwner: github_1.context.repo.owner,
         prConfig: getPrConfig(),
+        mergeBranchName: (0, core_1.getInput)("merge_branch_name", { required: true }).replace("refs/heads/", ""),
     };
 }
 exports.getConfig = getConfig;
@@ -51,20 +52,25 @@ const core_1 = __nccwpck_require__(2186);
 const github_1 = __nccwpck_require__(5438);
 async function mergeOrPr(config) {
     const octokit = (0, github_1.getOctokit)(config.repoToken);
-    if (!(await tryMerge(octokit, config))) {
-        await createPr(octokit, config);
-    }
+    (0, core_1.warning)('create pr');
+    await createPr(octokit, config);
+    (0, core_1.setOutput)("PR_CREATED", false);
+    (0, core_1.warning)('pr created');
+    (0, core_1.warning)('try merge');
+    await tryMerge(octokit, config);
+    (0, core_1.warning)('merged');
 }
 exports.mergeOrPr = mergeOrPr;
-async function tryMerge(octokit, { repoName: repo, repoOwner: owner, targetBranch: base, headToMerge: head, }) {
+async function tryMerge(octokit, { repoName: repo, repoOwner: owner, targetBranch: base, mergeBranchName: head, mergeBranchName: resolvePrBranchName }) {
     try {
+        const branchRef = `refs/heads/${resolvePrBranchName}`;
+        (0, core_1.warning)('merge "${branchRef}" on "${base}"');
         await octokit.rest.repos.merge({
             repo,
             owner,
             base,
             head,
         });
-        (0, core_1.setOutput)("PR_CREATED", false);
         return true;
     }
     catch (error) {
@@ -9922,6 +9928,7 @@ const get_config_1 = __nccwpck_require__(191);
 const merge_or_pr_1 = __nccwpck_require__(4526);
 async function run() {
     try {
+        (0, core_1.warning)('create pr');
         const config = (0, get_config_1.getConfig)();
         await (0, merge_or_pr_1.mergeOrPr)(config);
     }
