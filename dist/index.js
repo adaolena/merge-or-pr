@@ -100,7 +100,7 @@ async function createPr(octokit, config) {
         base: config.targetBranch,
     });
     const assignedUser = prConfig.assignedUser;
-    if (assignedUser) {
+    if (assignedUser && assignedUser !== "github-actions") {
         await octokit.rest.issues.addAssignees({
             repo: config.repoName,
             owner: config.repoOwner,

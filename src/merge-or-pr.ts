@@ -62,24 +62,25 @@ async function createPr(octokit: InstanceType<typeof GitHub>, config: Config) {
     maintainer_can_modify: prConfig.maintainerCanModify,
     base: config.targetBranch,
   });
-  const assignedUser = prConfig.assignedUser;
-  if (assignedUser) {
-    await octokit.rest.issues.addAssignees({
-      repo: config.repoName,
-      owner: config.repoOwner,
-      issue_number: pr.data.number,
-      assignees: [assignedUser],
-    });
+    const assignedUser = prConfig.assignedUser;
+    if (assignedUser && assignedUser !== "github-actions") {
+      await octokit.rest.issues.addAssignees({
+        repo: config.repoName,
+        owner: config.repoOwner,
+        issue_number: pr.data.number,
+        assignees: [assignedUser],
+      });
+    }
+    const reviewer = prConfig.reviewer;
+    if (reviewer) {
+      await octokit.rest.pulls.requestReviewers({
+        repo: config.repoName,
+        owner: config.repoOwner,
+        pull_number: pr.data.number,
+        reviewers: [reviewer],
+      });
   }
-  const reviewer = prConfig.reviewer;
-  if (reviewer) {
-    await octokit.rest.pulls.requestReviewers({
-      repo: config.repoName,
-      owner: config.repoOwner,
-      pull_number: pr.data.number,
-      reviewers: [reviewer],
-    });
-  }
+
   setOutput("PR_CREATED", true);
   setOutput("PR_NUMBER", pr.data.number);
   setOutput("PR_URL", pr.data.html_url);
