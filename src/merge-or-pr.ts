@@ -5,17 +5,10 @@ import { Config } from "./types";
 
 export async function mergeOrPr(config: Config) {
   const octokit = getOctokit(config.repoToken);
-  warning('create pr')
-
   await createPr(octokit, config);
   setOutput("PR_CREATED", false);
-  warning('pr created')
-  warning('try merge')
-
   await tryMerge(octokit, config)
-  warning('merged')
 
- 
 }
 
 async function tryMerge(
@@ -23,19 +16,17 @@ async function tryMerge(
   {
     repoName: repo,
     repoOwner: owner,
-    targetBranch: base,
-    headToMerge: head,
-    mergeBranchName: resolvePrBranchName
+    targetBranch: head,
+    mergeBranchName: base,
   }: Config
 ): Promise<boolean> {
   try {
-    const branchRef = `refs/heads/${resolvePrBranchName}`;
-    warning('merge "${branchRef}" on "${base}"')
+    warning( `merge "${head}" on "${base}" `)
     await octokit.rest.repos.merge({
       repo,
       owner,
       base,
-      branchRef,
+      head,
     });
     return true;
   } catch (error) {
