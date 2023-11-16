@@ -52,7 +52,7 @@ async function createPr(octokit: InstanceType<typeof GitHub>, config: Config) {
     sha: config.headToMerge,
     ref: branchRef,
   });
-  warning( `create ref "${branchRef}" `)
+  warning( `created ref "${branchRef}" `)
 
   const pr = await octokit.rest.pulls.create({
     repo: config.repoName,
@@ -64,10 +64,10 @@ async function createPr(octokit: InstanceType<typeof GitHub>, config: Config) {
     maintainer_can_modify: prConfig.maintainerCanModify,
     base: config.targetBranch,
   });
-  warning( `create pull request "${prConfig.title}" `)
+  warning( `created pull request "${prConfig.title}" `)
 
     const assignedUser = prConfig.assignedUser;
-    if (assignedUser && assignedUser !== "github-actions") {
+    if (assignedUser && assignedUser !== "github-actions[bot]") {
       await octokit.rest.issues.addAssignees({
         repo: config.repoName,
         owner: config.repoOwner,
@@ -78,7 +78,7 @@ async function createPr(octokit: InstanceType<typeof GitHub>, config: Config) {
     warning( `assigned user "${prConfig.title}" `)
 
     const reviewer = prConfig.reviewer;
-    if (reviewer && reviewer !== "github-actions") {
+    if (reviewer && reviewer !== "github-actions[bot]") {
       await octokit.rest.pulls.requestReviewers({
         repo: config.repoName,
         owner: config.repoOwner,
