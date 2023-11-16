@@ -109,7 +109,7 @@ async function createPr(octokit, config) {
         });
     }
     const reviewer = prConfig.reviewer;
-    if (reviewer) {
+    if (reviewer && reviewer !== "github-actions") {
         await octokit.rest.pulls.requestReviewers({
             repo: config.repoName,
             owner: config.repoOwner,
