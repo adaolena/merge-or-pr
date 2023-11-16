@@ -89,6 +89,7 @@ async function createPr(octokit, config) {
         sha: config.headToMerge,
         ref: branchRef,
     });
+    (0, core_1.warning)(`create ref "${branchRef}" `);
     const pr = await octokit.rest.pulls.create({
         repo: config.repoName,
         owner: config.repoOwner,
@@ -99,6 +100,7 @@ async function createPr(octokit, config) {
         maintainer_can_modify: prConfig.maintainerCanModify,
         base: config.targetBranch,
     });
+    (0, core_1.warning)(`create pull request "${prConfig.title}" `);
     const assignedUser = prConfig.assignedUser;
     if (assignedUser && assignedUser !== "github-actions") {
         await octokit.rest.issues.addAssignees({
@@ -108,6 +110,7 @@ async function createPr(octokit, config) {
             assignees: [assignedUser],
         });
     }
+    (0, core_1.warning)(`assigned user "${prConfig.title}" `);
     const reviewer = prConfig.reviewer;
     if (reviewer && reviewer !== "github-actions") {
         await octokit.rest.pulls.requestReviewers({
@@ -117,6 +120,7 @@ async function createPr(octokit, config) {
             reviewers: [reviewer],
         });
     }
+    (0, core_1.warning)(` reviewer "${prConfig.title}" `);
     (0, core_1.setOutput)("PR_CREATED", true);
     (0, core_1.setOutput)("PR_NUMBER", pr.data.number);
     (0, core_1.setOutput)("PR_URL", pr.data.html_url);
