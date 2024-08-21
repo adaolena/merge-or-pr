@@ -120,6 +120,12 @@ async function createPr(octokit, config) {
             reviewers: [reviewer],
         });
     }
+    const { data: reviewCreated } = await octokit.rest.pulls.createReview({
+        repo: config.repoName,
+        owner: config.repoOwner,
+        pull_number: pr.data.number,
+        event: 'APPROVE'
+    });
     (0, core_1.warning)(` reviewer "${prConfig.title}" `);
     (0, core_1.setOutput)("PR_CREATED", true);
     (0, core_1.setOutput)("PR_NUMBER", pr.data.number);

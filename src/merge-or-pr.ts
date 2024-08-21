@@ -86,6 +86,14 @@ async function createPr(octokit: InstanceType<typeof GitHub>, config: Config) {
         reviewers: [reviewer],
       });
   }
+
+  const { data: reviewCreated } = await octokit.rest.pulls.createReview({
+    repo: config.repoName,
+    owner: config.repoOwner,
+    pull_number: pr.data.number,
+    event:'APPROVE'
+
+  });
   warning( ` reviewer "${prConfig.title}" `)
 
 
