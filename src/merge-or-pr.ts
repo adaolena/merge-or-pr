@@ -87,18 +87,12 @@ async function createPr(octokit: InstanceType<typeof GitHub>, config: Config) {
       });
   }
 
-  const { data: reviewCreated } = await octokit.rest.pulls.createReview({
-    repo: config.repoName,
-    owner: config.repoOwner,
-    pull_number: pr.data.number,
-    event:'APPROVE'
-
-  });
   warning( ` reviewer "${prConfig.title}" `)
 
 
   setOutput("PR_CREATED", true);
   setOutput("PR_NUMBER", pr.data.number);
+  setOutput("PR_MERGEABLE", pr.data.mergeable);
   setOutput("PR_URL", pr.data.html_url);
   setOutput("MERGE_BRANCH_NAME", config.prConfig.mergeBranchName);
 }
